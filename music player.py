@@ -1,22 +1,31 @@
-import os
-import tkinter as tk
-from tkinter.filedialog import askdirectory
 import pygame
+import tkinter as tk
+from tkinter import *
+from tkinter.filedialog import askdirectory
+import os,tkinter
 
-musicplayer = tk.Tk()
-musicplayer.title('kc emma')
-musicplayer.geometry('420x320')
+
+m = Tk()
+m.title('kc emma music player')
+var = tk.StringVar
+
+# creating the music dimension
+m.geometry('400x500')
+
+dice = askdirectory()
 
 
-directory = askdirectory()
-os.chdir(directory)
-songlist =os.listdir()
-playlist =tk.Listbox(musicplayer,font ='Helvetica 12 bold', bg = 'yellow', selectmode = tk.SINGLE)
+os.chdir(dice)
 
-for item in songlist:
-    po=0
-    playlist.insert(po, item)
-    pos = po + 1
+song_list = os.listdir()
+
+# creating a playlist
+playlist = tk.Listbox(m, font='Cambria 14', bg ='cyan2', selectmode= tk.SINGLE)
+
+
+for item in song_list:
+    pos = 0
+    playlist.insert(pos,item)
 
 pygame.init()
 pygame.mixer.init()
@@ -29,31 +38,32 @@ def play():
 
 
 def stop():
-    pygame.mixer.music.stop()
+    #pygame.mixer.music.stop()
+    pygame.mixer.music.load(playlist.get(tk.ACTIVE))
+    pygame.mixer.music.play()
+
+def unpause():
+    pygame.mixer.music.unpause()
 
 
 def pause():
     pygame.mixer.music.pause()
 
 
-def unpause():
-    pygame.mixer.music.unpause()
+But_play = tk.Button(m, height=3, width = 5, text='Play Music', font='Cambria 14 bold', command =play, bg='green',fg='black')
+But_stop = tk.Button(m, height=3, width = 5, text='Stop Music', font='Cambria 14 bold', command =stop(), bg='green',fg='black')
+But_pause = tk.Button(m, height=3, width = 5, text='Pause Music', font='Cambria 14 bold', command =pause, bg='green',fg='black')
+But_resume = tk.Button(m, height=3, width = 5, text='resume Music', font='Cambria 14 bold', command =unpause, bg='green',fg='black')
+
+But_play.pack(fill='x')
+But_resume.pack(fill='x')
+But_pause.pack(fill='x')
+But_stop.pack(fill='x')
 
 
-button1 = tk.Button(musicplayer, width=4, height=3, text='PLAY', command=play, bg='red', fg='white')
-button2 = tk.Button(musicplayer, width=4, height=3, text='STOP', command=stop, bg='red', fg='white')
-button3 = tk.Button(musicplayer, width=4, height=3, text='PAUSE', command=pause, bg='red', fg='white')
-button4 = tk.Button(musicplayer, width=4, height=3, text='UNPAUSE', command=unpause, bg='red', fg='white')
-
-var = tk.StringVar
-song_man = tk.Label(musicplayer, font='Helvetica 12 bold', textvariable=var)
-song_man.pack()
-button1.pack(fill='x')
-button2.pack(fill='x')
-button3.pack(fill='x')
-button4.pack(fill='x')
-
-playlist.pack(fill='both',expand='yes')
+playlist.pack(fill='x', expand='yes')
+var = tk.StringVar()
 
 
-musicplayer.mainloop()
+song_title= tk.Label(m,font='Cambria 12 bold', textvariable = var)
+m.mainloop()
